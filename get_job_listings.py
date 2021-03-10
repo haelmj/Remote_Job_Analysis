@@ -17,8 +17,13 @@ import time
 
 STARTPAGE = 'https://weworkremotely.com/remote-jobs/search'
 PATH = 'path_to_chrome_driver'
-driver = webdriver.Chrome(PATH)
-
-driver.get(STARTPAGE)
-default_search_window = driver.window_handles[0]
 FOLDER = 'findings'
+categories = ['Design', 'Programming', 'Customer Support', 'Copywriting', 'DevOps and Sysadmin', 
+                'Sales and Marketing', 'Business, Management and Finance', 'Product']
+
+
+class Search():
+    def __init__(self):
+        self.driver = webdriver.Chrome(PATH)
+        self.driver.get(STARTPAGE)
+        self.search_window = driver.window_handles[0]
