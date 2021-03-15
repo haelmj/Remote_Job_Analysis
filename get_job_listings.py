@@ -26,4 +26,7 @@ class Search():
     def __init__(self):
         self.driver = webdriver.Chrome(PATH)
         self.driver.get(STARTPAGE)
-        self.search_window = driver.window_handles[0]
+        self.search_window = self.driver.window_handles[0]
+
+    def search(category):
+        pass
