@@ -16,7 +16,7 @@ import csv
 import time
 
 STARTPAGE = 'https://weworkremotely.com/remote-jobs/search'
-PATH = 'path_to_chrome_driver'
+PATH = './assets/chromedriver.exe'
 FOLDER = 'findings'
 categories = ['Design', 'Programming', 'Customer Support', 'Copywriting', 'DevOps and Sysadmin', 
                 'Sales and Marketing', 'Business, Management and Finance', 'Product']
