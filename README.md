@@ -1,4 +1,5 @@
 # Remote_Job_Analysis
+
 Analysis to determine the best type of jobs based on remote availability
 
 View Trello Board [here](https://trello.com/b/2eVWEyPj/remote-job-analysis)
@@ -24,11 +25,14 @@ This project requires preferably version 86.0.4240 of Chrome browser as well as 
 2. Setup Chrome Driver:
 
     - Include the ChromeDriver location in your PATH environment variable
+    - Create an environment variable with key: `CHROME_DRIVER` and value: the full path to the chromedriver executable.
 
 3. Setup a virtual environment:
 
 ```
+
 python -m venv venv
+
 ```
 
 4. Activate the virtual environment:
@@ -40,7 +44,7 @@ venv\Scripts\activate.bat
 
 For bash users:
 
-```
+```bash
 source /venv/Scripts/activate
 ```
 
