@@ -30,13 +30,11 @@ class Search():
         self.driver.get(STARTPAGE)
         self.search_window = self.driver.window_handles[0]
 
-    def select_category(self, category):
-        category_field = self.driver.find_element_by_xpath('/html/body/div[3]/header/section/form/div[2]/div[1]/div/ul/li/input')
-        category_field.send_keys(category)
-        category_field.send_keys(Keys.RETURN)
+    def select_category(self, category: str, e_index: int):
+        self.driver.execute_script(open("category_selection.js").read(), category, e_index)
         search_button = self.driver.find_element_by_xpath('/html/body/div[3]/header/section/form/div[1]/button')
         search_button.send_keys(Keys.RETURN)
-        time.sleep(10)
+        time.sleep(6)
 
     def remove_category(self):
         """Search page for delete button on selected category and click it"""
@@ -44,8 +42,8 @@ class Search():
         filter_reset_button.click()
         time.sleep(6)
 
-    def get_jobs(self, category):
-        self.select_category(category)
+    def get_jobs(self, category: str, e_index: int):
+        self.select_category(category, e_index)
         # scrape current category job listing
         job_section = self.driver.find_element_by_xpath('/html/body/div[3]/div/section')
         jobs = job_section.find_elements_by_tag_name('li')
@@ -54,7 +52,8 @@ class Search():
         self.remove_category()
 
     def main(self):
-        for category in categories:
-            self.get_jobs(categories)
+        for i in range(len(categories)):
+            self.get_jobs(categories[i], i)
 
+            
 Search().main()
