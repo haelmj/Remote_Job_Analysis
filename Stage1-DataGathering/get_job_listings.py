@@ -40,8 +40,9 @@ class Search():
 
     def remove_category(self):
         """Search page for delete button on selected category and click it"""
-        category_delete_button = self.driver.find_element_by_xpath('/html/body/div[3]/header/section/form/div[2]/div[1]/div/ul/li[1]/a')
-        category_delete_button.click()
+        filter_reset_button = self.driver.find_element_by_xpath('/html/body/div[3]/header/section/form/div[2]/div[5]/span')
+        filter_reset_button.click()
+        time.sleep(6)
 
     def get_jobs(self, category):
         self.select_category(category)
