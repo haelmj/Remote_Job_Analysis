@@ -39,16 +39,21 @@ class Search():
         time.sleep(10)
 
     def remove_category(self):
-        # find selected category and remove it//optionally reset driver window
-        pass
+        """Search page for delete button on selected category and click it"""
+        category_delete_button = self.driver.find_element_by_xpath('/html/body/div[3]/header/section/form/div[2]/div[1]/div/ul/li[1]/a')
+        category_delete_button.click()
 
     def get_jobs(self, category):
         self.select_category(category)
         # scrape current category job listing
+        job_section = self.driver.find_element_by_xpath('/html/body/div[3]/div/section')
+        jobs = job_section.find_elements_by_tag_name('li')
+        # add code to extract content of a href tags in each list
+        # open csv file in write mode and append content to file...include the category as a column
+        self.remove_category()
 
     def main(self):
         for category in categories:
             self.get_jobs(categories)
-            # append category cleanup function
 
 Search().main()
