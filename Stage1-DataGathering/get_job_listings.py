@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.touch_actions import TouchActions
+from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
@@ -55,8 +56,8 @@ class Search():
         filter_reset_button.click()
         time.sleep(6)
 
-    def get_jobs(self, category: str, e_index: int):
-        """Loop through the list of job postings and extract individual job elements
+    def get_job_list(self, category: str, e_index: int):
+        """Loop through the list of job postings and return list of job elements
         
         Args:
             category(str):  The category to be selected.
@@ -70,10 +71,57 @@ class Search():
         # add code to extract content of a href tags in each list
         # open csv file in write mode and append content to file...include the category as a column
         self.remove_category()
+        return jobs
+    
+    def get_jobs_info(self, jobs: list, category: str):
+        """Loop through the list of jobs and extract individual job elements
+        
+        Args:
+            jobs(list): A list containing job elements in the form of li webelements
+        
+        Returns:
+            jobs_info(list): A 2-d list where each item is the info relating to a specific job.
+        """
+        jobs_info_section = [jobs[i].find_element_by_xpath('//*[@id="category-1"]/article/ul/li[{j}]/a'.format(j=i+1)) for i in range(len(jobs))]
+        jobs_info = []
+        for job in jobs_info_section:
+            single_job_info = self.get_jobs_info(job, category)
+            jobs_info.append(single_job_info)
+        return jobs_info
+            
 
+    def get_job_info(self, job: WebElement, category: str):
+        """Extract Job Info from a given element and return it in a list
+        
+        Args:
+            job(WebElement): A webelement reference to a tag consisting of job info.
+            category(str): The category the job fits into.
+        
+        Returns:
+            info(list): A list containing the following info: company_name, title, job_type, region and category.
+        """
+        company_and_job_type = job.find_elements_by_class_name('company')
+        company_name = company_and_job_type[0].get_attribute('textContent')
+        job_type = company_and_job_type[1].get_attribute('textContent')
+        title = job.find_element_by_class_name('title').get_attribute('textContent')
+        region = job.find_element_by_class_name('region company').get_attribute('textContent')
+        return [company_name, title, job_type, region, category]
+        
     def main(self):
-        for i in range(len(categories)):
-            self.get_jobs(categories[i], i)
+        """Core method of class: executes entire workflow.
+
+        Ports final gathered data to csv file.
+        """
+        columns = ['company', 'title', 'job-type', 'company-region', 'category']
+        with open('data.csv', 'w', newline='', encoding='utf-8') as d_file:
+            csv_writer = csv.writer(d_file)
+            csv_writer.writerow(columns)
+
+            for i in range(len(categories)):
+                jobs = self.get_job_list(categories[i], i)
+                jobs_info = self.get_jobs_info(jobs, categories[i])
+                for info in jobs_info:
+                    csv_writer.writerow(info)
 
             
 Search().main()
