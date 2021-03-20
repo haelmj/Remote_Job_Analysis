@@ -25,12 +25,25 @@ categories = ['Design', 'Programming', 'Customer Support', 'Copywriting', 'DevOp
 
 
 class Search():
+    """
+    The Search object holds all job scraping related functionality
+
+    Attributes:
+        driver (WebDriver): Controls the ChromeDriver and allows you to drive the browser
+        search_window (str): The starter page for all searches    
+    """
     def __init__(self):
         self.driver = webdriver.Chrome(PATH)
         self.driver.get(STARTPAGE)
         self.search_window = self.driver.window_handles[0]
 
     def select_category(self, category: str, e_index: int):
+        """Executes javascript to select category and clicks the search button
+        
+        Args:
+            category(str):  The category to be selected.
+            e_index(int):   The index of the category in it's list. 
+        """
         self.driver.execute_script(open("category_selection.js").read(), category, e_index)
         search_button = self.driver.find_element_by_xpath('/html/body/div[3]/header/section/form/div[1]/button')
         search_button.send_keys(Keys.RETURN)
@@ -43,6 +56,13 @@ class Search():
         time.sleep(6)
 
     def get_jobs(self, category: str, e_index: int):
+        """Loop through the list of job postings and extract individual job elements
+        
+        Args:
+            category(str):  The category to be selected.
+            e_index(int):   The index of the category in it's list.
+
+        """
         self.select_category(category, e_index)
         # scrape current category job listing
         job_section = self.driver.find_element_by_xpath('/html/body/div[3]/div/section')

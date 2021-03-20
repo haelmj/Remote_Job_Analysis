@@ -1,3 +1,14 @@
+// Mock html:
+// <div id='categories_chosen_chosen'>
+//  <ul class='chosen-choices'>
+//      <li class='search-choice'>
+//          <span>arguments[0]</span>
+//          <a class='search-choice-close' data-option-array-index='arguments[1]'></a>
+//      </li>
+//  ...existingchildNodes
+//  </ul>
+// </div>
+
 var item = document.createElement('li');
 item.className = 'search-choice';
 var span = document.createElement('span');
