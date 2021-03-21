@@ -14,6 +14,7 @@ from selenium.webdriver.common.touch_actions import TouchActions
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 import os
 import csv
 import time
@@ -70,7 +71,7 @@ class Search():
         jobs = job_section.find_elements_by_tag_name('li')
         # add code to extract content of a href tags in each list
         # open csv file in write mode and append content to file...include the category as a column
-        self.remove_category()
+        
         return jobs
     
     def get_jobs_info(self, jobs: list, category: str):
@@ -82,10 +83,10 @@ class Search():
         Returns:
             jobs_info(list): A 2-d list where each item is the info relating to a specific job.
         """
-        jobs_info_section = [jobs[i].find_element_by_xpath('//*[@id="category-1"]/article/ul/li[{j}]/a'.format(j=i+1)) for i in range(len(jobs))]
+        jobs_info_section = [jobs[i].find_element_by_xpath(f'/html/body/div[3]/div/section/article/ul/li[{i+1}]/a') for i in range(len(jobs))]
         jobs_info = []
         for job in jobs_info_section:
-            single_job_info = self.get_jobs_info(job, category)
+            single_job_info = self.get_job_info(job, category)
             jobs_info.append(single_job_info)
         return jobs_info
             
@@ -100,11 +101,15 @@ class Search():
         Returns:
             info(list): A list containing the following info: company_name, title, job_type, region and category.
         """
+        
         company_and_job_type = job.find_elements_by_class_name('company')
         company_name = company_and_job_type[0].get_attribute('textContent')
         job_type = company_and_job_type[1].get_attribute('textContent')
         title = job.find_element_by_class_name('title').get_attribute('textContent')
-        region = job.find_element_by_class_name('region company').get_attribute('textContent')
+        try:
+            region = job.find_element_by_css_selector('section.jobs article ul li span.region.company').get_attribute('textContent')
+        except NoSuchElementException:
+            region = ''
         return [company_name, title, job_type, region, category]
         
     def main(self):
@@ -122,6 +127,7 @@ class Search():
                 jobs_info = self.get_jobs_info(jobs, categories[i])
                 for info in jobs_info:
                     csv_writer.writerow(info)
+                self.remove_category()
 
             
 Search().main()
