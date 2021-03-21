@@ -66,12 +66,8 @@ class Search():
 
         """
         self.select_category(category, e_index)
-        # scrape current category job listing
         job_section = self.driver.find_element_by_xpath('/html/body/div[3]/div/section')
         jobs = job_section.find_elements_by_tag_name('li')
-        # add code to extract content of a href tags in each list
-        # open csv file in write mode and append content to file...include the category as a column
-        
         return jobs
     
     def get_jobs_info(self, jobs: list, category: str):
@@ -84,6 +80,7 @@ class Search():
             jobs_info(list): A 2-d list where each item is the info relating to a specific job.
         """
         jobs_info_section = [jobs[i].find_element_by_xpath(f'/html/body/div[3]/div/section/article/ul/li[{i+1}]/a') for i in range(len(jobs))]
+        # extract content of anchor tags in each list item
         jobs_info = []
         for job in jobs_info_section:
             single_job_info = self.get_job_info(job, category)
