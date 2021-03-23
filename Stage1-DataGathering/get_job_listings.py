@@ -23,7 +23,7 @@ STARTPAGE = 'https://weworkremotely.com/remote-jobs/search'
 PATH = os.getenv('CHROME_DRIVER')
 FOLDER = 'findings'
 categories = ['Design', 'Programming', 'Customer Support', 'Copywriting', 'DevOps and Sysadmin', 
-                'Sales and Marketing', 'Business, Management and Finance', 'Product']
+                'Sales and Marketing', 'Management and Finance', 'Product']
 
 
 class Search():
